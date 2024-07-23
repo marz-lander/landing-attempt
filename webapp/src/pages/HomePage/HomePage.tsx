@@ -31,9 +31,9 @@ const HomePage = () => {
 
   const getOrders = async () => {
     setLoadingState(DATA_STATES.waiting);
-    const { orderData, errorOccured } = await getInPipelineData();
+    const { orderData, errorOccurred } = await getInPipelineData();
     setData(orderData);
-    setLoadingState(errorOccured ? DATA_STATES.error : DATA_STATES.loaded);
+    setLoadingState(errorOccurred ? DATA_STATES.error : DATA_STATES.loaded);
   };
 
   const updateOrder = async (order: Order) => {

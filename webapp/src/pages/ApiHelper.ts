@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Order, OrderData } from "../components/interfaces";
+import { Order, OrderData, Product } from "../components/interfaces";
 
 const INPIPELINE_URL = '/api/orders/inpipeline';
 
@@ -9,7 +9,7 @@ const getInPipelineData = async () => {
       InProgress: [],
       QA: [],
     };
-    let errorOccured = false;
+    let errorOccurred = false;
     try {
       const response = await axios.get(INPIPELINE_URL);
       if (response?.status === 200) {
@@ -23,9 +23,9 @@ const getInPipelineData = async () => {
       }
     } catch(err) {
       console.error(err);
-      errorOccured = true;
+      errorOccurred = true;
     }
-    return { orderData, errorOccured };
+    return { orderData, errorOccurred };
 };
 
 const UPDATE_STATUS_URL = '/api/orders/update_status';
@@ -46,4 +46,32 @@ const updateOrderStatus = async (order: Order, newOrderStatus: string) => {
     return orderStatusUpdated;
 };
 
-export { getInPipelineData, INPIPELINE_URL, updateOrderStatus, UPDATE_STATUS_URL };
+const GET_PRODUCTS_URL = '/api/products/';
+const getProducts = async () => {
+  let errorOccurred = false;
+  let products = [];
+  try {
+    const response = await axios.get(GET_PRODUCTS_URL);
+    if (response?.status === 200) {
+      const { data } = response.data;
+      products = data.map((product: any): Product => product as Product);
+    } else {
+      const { message } = response.data;
+      throw message;
+    }
+  } catch(err) {
+    console.error(err);
+    errorOccurred = true;
+  }
+  return { products, errorOccurred };
+}
+
+
+export { 
+  getInPipelineData, 
+  INPIPELINE_URL, 
+  updateOrderStatus, 
+  UPDATE_STATUS_URL,
+  getProducts,
+  GET_PRODUCTS_URL,
+};
